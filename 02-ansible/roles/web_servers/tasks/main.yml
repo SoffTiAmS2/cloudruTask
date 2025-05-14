@@ -1,0 +1,43 @@
+- name: Логин в приватный реестр
+  docker_login:
+    registry_url: "{{ registry_url }}"
+    username: "{{ registry_username }}"
+    password: "{{ registry_password }}"
+
+- name: Запуск контейнеров
+  docker_container:
+    name: "app_{{ item }}"
+    image: "{{ registry_url }}/{{ registry_repo }}"
+    state: started
+    restart_policy: always
+    env:
+      AUTHOR: "{{ AUTHOR }}"
+    published_ports:
+      - "{{ item }}:8000"
+  loop: "{{ app_ports }}"
+
+- name: Установить nginx
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Развернуть конфигурацию nginx
+  template:
+    src: nginx.conf.j2
+    dest: /etc/nginx/sites-available/default
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Открытие порта 80
+  ufw:
+    rule: allow
+    port: 80
+    proto: tcp
+
+- name: Перезапустить nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes

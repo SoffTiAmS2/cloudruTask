@@ -1,0 +1,23 @@
+- name: Обновить кэш и установить зависимости
+  apt:
+    update_cache: yes
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
+
+- name: Добавить GPG ключ Docker
+  apt_key:
+    url: https://download.docker.com/linux/ubuntu/gpg
+    state: present
+
+- name: Добавить репозиторий Docker
+  apt_repository:
+    repo: "deb https://download.docker.com/linux/ubuntu {{ ansible_lsb.codename }} stable"
+
+- name: Установить docker-ce
+  apt:
+    name: docker-ce
+    update_cache: yes

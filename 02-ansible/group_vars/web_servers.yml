@@ -1,0 +1,12 @@
+# Доступ к приватному реестру
+registry_url: "docker.io"
+registry_repo: "sdulisoff/echoserver:v01"
+registry_username: "sdulisoff"
+registry_password: "hajqek-pujrik-4goTgi"
+
+# Параметры приложения
+AUTHOR: "Stasik"
+app_ports:
+  - 8000
+  - 8001
+  - 8002

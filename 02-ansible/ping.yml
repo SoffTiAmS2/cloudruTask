@@ -1,0 +1,9 @@
+- hosts: web_servers
+  become: true
+  vars_files:
+    - group_vars/web_servers.yml
+
+  roles:
+    - docker
+
+    - web_servers
